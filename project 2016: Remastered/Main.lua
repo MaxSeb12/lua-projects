@@ -71,11 +71,16 @@ makefolder("2016_storage")
 writefile("2016_storage/bc.png", game:HttpGet("https://raw.githubusercontent.com/specowos/lua-projects/main/project%202016%3A%20Remastered/images/icon_BC-16.png"))
 writefile("2016_storage/tbc.png", game:HttpGet("https://raw.githubusercontent.com/specowos/lua-projects/main/project%202016%3A%20Remastered/images/icon_TBC-16.png"))
 writefile("2016_storage/obc.png", game:HttpGet("https://raw.githubusercontent.com/specowos/lua-projects/main/project%202016%3A%20Remastered/images/icon_OBC-16.png"))
+writefile("2016_storage/admin.png", game:HttpGet("https://github.com/MaxSeb12/lua-projects/blob/main/project%202016:%20Remastered/images/icon_admin-16.png"))
 
 local bc_storage = {
     getasset("2016_storage/bc.png"),
     getasset("2016_storage/obc.png"),
     getasset("2016_storage/tbc.png")
+}
+
+local admin_storage = {
+	getasset("2016_storage/admin.png")
 }
 
 --// STYLE:
@@ -395,7 +400,7 @@ if config.old_plist then
 
     EPadding.PaddingBottom = UDim.new(0, 22.4)
 
-    local function addplr(name, is_bc, is_friend, is_dev)
+    local function addplr(name, is_bc, is_friend, is_dev, is_dogetalk)
         local Player = Instance.new("TextButton", ScrollList)
         local PPadding = Instance.new("UIPadding", Player)
         local IgnorePaddingFrame = Instance.new("Frame", Player)
@@ -437,6 +442,11 @@ if config.old_plist then
         if is_friend then
             Icon.Image = "rbxasset://textures/ui/icon_friends_16.png"
         end
+		
+	if is_dogetalk then
+	    local randoadm = admin_storage[math.random(1,#admin_storage)]
+	    Icon.Image = randoadm
+	end
 
         local open = false
 
@@ -558,8 +568,14 @@ if config.old_plist then
                 return true
             end
         end
+		
+	local function isdogetalk_func()
+	    if player.UserId == 2442178314 then
+		return true
+	    end
+	end
 
-        addplr(v.Name, isbc_func(), isfriend_func(), isdev_func())
+        addplr(v.Name, isbc_func(), isfriend_func(), isdev_func(), isdogetalk_func())
     end
 
     game:GetService("Players").PlayerAdded:Connect(function(player)
@@ -580,8 +596,14 @@ if config.old_plist then
                 return true
             end
         end
+			
+	local function isdogetalk_func()
+	    if player.UserId == 2442178314 then
+		return true
+	    end
+	end
 
-        addplr(player.Name, isbc_func(), isfriend_func(), isdev_func())
+        addplr(player.Name, isbc_func(), isfriend_func(), isdev_func(), isdogetalk_func())
     end)
 
     game:GetService("Players").PlayerRemoving:Connect(function(player)
